@@ -1,4 +1,4 @@
-# bash script
+#!/bin/bash
 echo "Welcome to the Installator of Playstube, wait..."
 sleep 5
 clear
