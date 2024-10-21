@@ -5,7 +5,7 @@ Hello, my name is Humberto, and this is LivePub. As you can see, this have pytho
 
 # The code
 
-Before we start, we need to test the platform, for that, you can acess [Click Here](http://hsyst.com.br/playstube.html)
+Before we start, we need to test the platform, for that, you can acess [Click Here](http://hsyst.com.br/PlaysTube.html)
 
 # Installation
 
