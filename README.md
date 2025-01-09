@@ -1,5 +1,5 @@
 # Acesse o Tutorial de Uso
-Caso você deseje apenas executar nosso serviço, não precisa se preocupar, fizemos um tutorial simples e detalhado de como executar o Playstube 2.0.0 em seu próprio servidor, ou computador.
+Caso você deseje apenas executar nosso serviço, não precisa se preocupar, [fizemos um tutorial](https://github.com/Hsyst/Playstube/blob/main/tutorial_uso.md) simples e detalhado de como executar o Playstube 2.0.0 em seu próprio servidor, ou computador.
 
 # Realize o Download
 Caso já tenha lido o Tutorial de Uso, ou deseja realizar o download primeiro, basta [clicar aqui](https://github.com/Hsyst/Playstube/releases)
@@ -174,7 +174,7 @@ Após terminar o Upload, e ele responder com Concluido, você pode adicionar o v
 Já matamos mais um, simbora para o...
 
 # Como executar?
-Muito simples, nós criamos o `Tutorial de Uso`, que você e todos podem consultar para entender como baixar, e executar o Playstube 2.0.0.
+Muito simples, nós criamos o [tutorial de uso](https://github.com/Hsyst/Playstube/blob/main/tutorial_uso.md), que você e todos podem consultar para entender como baixar, e executar o Playstube 2.0.0.
 
 # Configurações Básicas
 Vamos separar pelo Playstube-Main (HTTP), e o Playstube-SSL (HTTPS)/(SSL).
