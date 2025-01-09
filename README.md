@@ -2,7 +2,7 @@
 Caso você deseje apenas executar nosso serviço, não precisa se preocupar, fizemos um tutorial simples e detalhado de como executar o Playstube 2.0.0 em seu próprio servidor, ou computador.
 
 # Realize o Download
-Caso já tenha lido o Tutorial de Uso, ou deseja realizar o download primeiro, basta [clicar aqui](https://github.com/Hsyst/Playstube/release)
+Caso já tenha lido o Tutorial de Uso, ou deseja realizar o download primeiro, basta [clicar aqui](https://github.com/Hsyst/Playstube/releases)
 
 ---
 ---
