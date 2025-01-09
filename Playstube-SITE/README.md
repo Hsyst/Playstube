@@ -4,7 +4,7 @@ Bem vindo a pasta **Playstube-SITE**. Aqui, você vai encontrar todos os arquivo
 # Estrutura de diretórios
 
 - MAIN (Essa pasta)
-- - assets (arquivos CSS, JavaScript e Imagens)
+  - assets (arquivos CSS, JavaScript e Imagens)
 
 # Observação
 A pasta da API, já está incluindo o site, portanto, ao iniciar o arquivo JS, você está iniciando o servidor web e o serviço de API na porta 3000 (por padrão)
