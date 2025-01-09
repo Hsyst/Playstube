@@ -17,7 +17,9 @@ Abra o CMD ou Terminal em seu computador, **na pasta onde contém os arquivos JS
 ---
 
 Realize o download dos pacotes necessitados: 
-```npm install```
+```
+npm install
+```
 
 ---
 
