@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html data-bs-theme="light" lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>Canal - Playstube</title>
+    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800&amp;display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic&amp;display=swap">
+    <link rel="stylesheet" href="https://cdn.plyr.io/3.6.8/plyr.css" />
+    <style>
+        .thumbnail {
+            width: 100px;
+            height: 80px;
+            object-fit: cover;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg fixed-top" id="mainNav">
+        <div class="container"><a class="navbar-brand" href="index.html">PlaysTube - 2.0</a><a class="btn btn-primary" role="button" href="index.html">Voltar</a></div>
+    </nav>
+    <header class="masthead" style="background-image:url('assets/img/home-bg.jpg');">
+        <div class="overlay"></div>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-10 col-lg-8 mx-auto position-relative">
+                    <div class="site-heading">
+                        <h1 id="channelName"></h1>
+                        <span class="subheading" id="channelDesc"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    <div class="container">
+        <h1>Apresentação do canal:</h1>
+        <video id="channelPresentation" width="560" height="315" controls autoplay></video>
+        <hr>
+        <h1>Vídeos do canal:</h1>
+        <div id="videoList" class="row">
+            <!-- Lista de vídeos será gerada aqui -->
+        </div>
+    </div>
+    <hr>
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-10 col-lg-8 mx-auto">
+                    <p class="text-muted copyright">Copyright&nbsp;© Hsyst 2025</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!-- Modal para o player -->
+    <div class="modal fade" id="videoModal" tabindex="-1" aria-labelledby="videoModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="videoModalLabel">Título do Vídeo</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <video id="videoPlayer" controls>
+                        <source id="videoSource" src="" type="video/mp4">
+                        Seu navegador não suporta o elemento de vídeo.
+                    </video>
+                    <p id="videoDescription"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+    <script src="https://cdn.plyr.io/3.6.8/plyr.polyfilled.js"></script>
+<script>
+    const videoList = document.getElementById('videoList');
+    const channelName = document.getElementById('channelName');
+    const channelDesc = document.getElementById('channelDesc');
+    const channelPresentation = document.getElementById('channelPresentation');
+
+    // Função para obter o nome do canal da URL
+    function getChannelFromURL() {
+        const hash = window.location.hash;
+        const channel = hash.split('=')[1];
+        return channel ? decodeURIComponent(channel) : null;
+    }
+
+    // Função para buscar informações do canal
+    async function fetchChannelInfo(channel) {
+        const response = await fetch(`/get-channels`);
+        const data = await response.json();
+        const channelInfo = data.channels.find(c => c.name === channel);
+        if (channelInfo) {
+            channelName.textContent = channelInfo.name;
+            channelDesc.textContent = channelInfo.desc;
+        }
+    }
+
+    // Função para listar vídeos do canal
+    async function fetchChannelVideos(channel) {
+        const response = await fetch(`/get-videos?ofchannel=${channel}`);
+        const data = await response.json();
+        displayVideos(data.videos);
+        // Exibir um vídeo aleatório como apresentação do canal
+        if (data.videos.length > 0) {
+            const randomVideo = data.videos[Math.floor(Math.random() * data.videos.length)];
+            channelPresentation.src = `/database/${randomVideo.videoFile}`;
+        }
+    }
+
+    // Função para exibir vídeos na página
+    function displayVideos(videos) {
+        videoList.innerHTML = '';
+        videos.forEach(video => {
+            const videoItem = document.createElement('div');
+            videoItem.className = 'col-md-10 col-lg-8 col-xl-12';
+            videoItem.innerHTML = `
+                <div class="post-preview">
+                    <a href="#" onclick="openVideo('${video.videoFile}', '${video.name}', '${video.description}')">
+                        <h2 class="post-title">
+                            <img width="100" height="80" src="/logo.png" class="thumbnail" onload="generateThumbnail('${video.videoFile}', this)">
+                            &nbsp; ${video.name}
+                        </h2>
+                        <h3 class="post-subtitle">${video.description}</h3>
+                    </a>
+                    <p class="post-meta">Enviado por&nbsp;<a href="#">${video.channel} em ${video.createdIn}</a></p>
+                </div>
+                <hr>
+            `;
+            videoList.appendChild(videoItem);
+        });
+    }
+
+    // Função para gerar a thumbnail a partir do primeiro frame do vídeo
+    function generateThumbnail(videoFile, imgElement) {
+        const video = document.createElement('video');
+        video.src = `/database/${videoFile}`;
+        video.addEventListener('loadeddata', () => {
+            video.currentTime = 1; // Captura o frame no segundo 1
+        });
+        video.addEventListener('seeked', () => {
+            const canvas = document.createElement('canvas');
+            canvas.width = 100;
+            canvas.height = 80;
+            const context = canvas.getContext('2d');
+            context.drawImage(video, 0, 0, canvas.width, canvas.height);
+            imgElement.src = canvas.toDataURL(); // Define a imagem da thumbnail
+        });
+        video.load();
+    }
+
+    // Função para abrir o vídeo no modal
+    function openVideo(videoFile, title, description) {
+        const videoModal = new bootstrap.Modal(document.getElementById('videoModal'));
+        const videoPlayer = new Plyr('#videoPlayer');
+        const videoSource = document.getElementById('videoSource');
+        const videoDescription = document.getElementById('videoDescription');
+        const videoModalLabel = document.getElementById('videoModalLabel');
+
+        videoSource.src = `/database/${videoFile}`;
+        videoModalLabel.textContent = title;
+        videoDescription.textContent = description;
+        videoPlayer.source = {
+            type: 'video',
+            sources: [{
+                src: videoSource.src,
+                type: 'video/mp4',
+            }],
+        };
+        videoPlayer.play();
+        videoModal.show();
+    }
+
+    // Chama as funções para buscar informações do canal e vídeos ao carregar a página
+    const channel = getChannelFromURL();
+    if (channel) {
+        fetchChannelInfo(channel);
+        fetchChannelVideos(channel);
+    }
+</script>
+</body>
+</html>

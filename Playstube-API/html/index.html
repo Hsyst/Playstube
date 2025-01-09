@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html data-bs-theme="light" lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>Página Inicial - Playstube</title>
+    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800&amp;display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic&amp;display=swap">
+    <link rel="stylesheet" href="https://cdn.plyr.io/3.6.8/plyr.css" />
+    <style>
+        .thumbnail {
+            width: 100px;
+            height: 80px;
+            object-fit: cover;
+        }
+    </style>
+</head>
+
+<body>
+    <header class="masthead" style="background-image:url('assets/img/home-bg2.jpg');">
+        <div class="overlay"></div>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-10 col-lg-8 mx-auto position-relative">
+                    <div class="site-heading">
+                        <h1>Bem Vindo(a)</h1><span class="subheading">ao PlaysTube (Rodando na versão 2.0)</span>
+                        <p>Que tal descer a página, e descobrir mais?</p>
+                        <div class="container"><a class="navbar-brand" href="index.html"></a><a class="btn btn-primary" role="button" href="create.html">Poste um vídeo!</a></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    <section class="position-relative py-4 py-xl-5">
+        <section class="py-4 py-xl-5">
+            <div class="container">
+                <div class="text-white bg-dark border rounded border-0 border-light d-flex flex-column justify-content-between align-items-center flex-lg-row p-4 p-lg-5">
+                    <div class="text-center text-lg-start py-3 py-lg-1">
+                        <h2 class="fw-bold mb-2"><strong>Pesquise um vídeo!</strong></h2>
+                    </div>
+                    <form class="d-flex justify-content-center flex-wrap my-2" id="searchForm">
+                        <div class="my-2"><input class="form-control" type="text" name="search" id="searchInput" placeholder="Pesquise aqui!"></div>
+                        <div class="my-2"><button class="btn btn-primary ms-sm-2" type="submit">Pesquisar</button></div>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </section>
+    <div class="container" id="videoList">
+        <div class="row">
+            <!-- Lista de vídeos será gerada aqui -->
+        </div>
+    </div>
+
+    <!-- Modal para o player -->
+    <div class="modal fade" id="videoModal" tabindex="-1" aria-labelledby="videoModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="videoModalLabel">Título do Vídeo</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <video id="videoPlayer" controls>
+                        <source id="videoSource" src="" type="video/mp4">
+                        Seu navegador não suporta o elemento de vídeo.
+                    </video>
+                    <p id="videoDescription"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-10 col-lg-8 mx-auto">
+                    <p class="text-muted copyright">Copyright&nbsp;© Hsyst 2025</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+    <script src="https://cdn.plyr.io/3.6.8/plyr.polyfilled.js"></script>
+    <script>
+        const videoList = document.getElementById('videoList').querySelector('.row');
+        const searchForm = document.getElementById('searchForm');
+        const videoModal = new bootstrap.Modal(document.getElementById('videoModal'));
+        const videoPlayer = new Plyr('#videoPlayer');
+        const videoSource = document.getElementById('videoSource');
+        const videoDescription = document.getElementById('videoDescription');
+        const videoModalLabel = document.getElementById('videoModalLabel');
+
+        // Função para listar vídeos
+        async function fetchVideos() {
+            const response = await fetch('/get-videos');
+            const data = await response.json();
+            displayVideos(data.videos);
+        }
+
+        // Função para exibir vídeos na página
+        function displayVideos(videos) {
+            videoList.innerHTML = '';
+            videos.forEach(video => {
+                const videoItem = document.createElement('div');
+                videoItem.className = 'col-md-10 col-lg-8 col-xl-12';
+                    videoItem.innerHTML = `
+            <div class="post-preview">
+                <a href="#" onclick="openVideo('${video.videoFile}', '${video.name}', '${video.description}')">
+                    <h2 class="post-title">
+                        <img width="100" height="80" src="/logo.png" class="thumbnail" onload="/logo.png', this)">
+                        &nbsp; ${video.name}
+                    </h2>
+                    <h3 class="post-subtitle">${video.description}</h3>
+                </a>
+                <p class="post-meta">Enviado por&nbsp;<a href="channel.html#channel=${video.channel}">${video.channel} em ${video.createdIn}</a></p>
+            </div>
+            <hr>
+        `;
+        videoList.appendChild(videoItem);
+            });
+        }
+
+        // Função para gerar a thumbnail a partir do primeiro frame do vídeo
+        function generateThumbnail(videoFile, imgElement) {
+            const video = document.createElement('video');
+            video.src = `/database/${videoFile}`;
+            video.addEventListener('loadeddata', () => {
+                video.currentTime = 1; // Captura o frame no segundo 1
+            });
+            video.addEventListener('seeked', () => {
+                const canvas = document.createElement('canvas');
+                canvas.width = 100;
+                canvas.height = 80;
+                const context = canvas.getContext('2d');
+                context.drawImage(video, 0, 0, canvas.width, canvas.height);
+                imgElement.src = canvas.toDataURL(); // Define a imagem da thumbnail
+            });
+            video.load();
+        }
+
+        // Função para abrir o vídeo no modal
+        function openVideo(videoFile, title, description) {
+            videoSource.src = `/database/${videoFile}`;
+            videoModalLabel.textContent = title;
+            videoDescription.textContent = description;
+            videoPlayer.source = {
+                type: 'video',
+                sources: [{
+                    src: videoSource.src,
+                    type: 'video/mp4',
+                }],
+            };
+            videoPlayer.play();
+            videoModal.show();
+        }
+
+        // Função para pesquisar vídeos
+        async function searchVideos(query) {
+            const response = await fetch(`/query-videos?query=${query}`);
+            const data = await response.json();
+            displayVideos(data.results);
+        }
+
+        // Evento de submissão do formulário de pesquisa
+        searchForm.addEventListener('submit', (event) => {
+            event.preventDefault();
+            const query = document.getElementById('searchInput').value;
+            searchVideos(query);
+        });
+
+        // Chama a função para listar vídeos ao carregar a página
+        fetchVideos();
+    </script>
+</body>
+</html>
