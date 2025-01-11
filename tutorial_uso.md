@@ -6,7 +6,7 @@ Bem vindo(a) ao tutorial de uso do Playstube 2.0.0, aqui, você vai entender com
 ---
 
 # Preparação
-Antes de tudo, nesse tutorial estamos considerando que você está com o [NPM](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm) e o [NodeJS](https://nodejs.org/en/download) instalados e configurados.
+Antes de tudo, nesse tutorial estamos considerando que você está com o [NPM e o NodeJS](https://nodejs.org/en/download) instalados e configurados.
 
 # Realizando o Download
 Para realizar o Download, é muito simples, basta [clicar aqui](https://github.com/Hsyst/Playstube/releases/download/Playstube-2.0.0/PlaysTube-all.zip) e extrair o arquivo ".zip", e abrir a pasta aonde contém os arquivos ".js".
