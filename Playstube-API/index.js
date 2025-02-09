@@ -45,6 +45,8 @@ db.serialize(() => {
 });
 
 let channels = {};
+let videos = [];
+
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -60,7 +62,7 @@ app.use(cors());
 app.use('/database', express.static(path.join(__dirname, 'database')));
 app.use('/', express.static(path.join(__dirname, 'html')));
 
-// Função para carregar dados do banco de dados
+// Função para carregar dados do banco de dados (channels)
 async function loadDatabase() {
   return new Promise((resolve, reject) => {
     db.all('SELECT * FROM channels', [], (err, rows) => {
@@ -73,6 +75,30 @@ async function loadDatabase() {
     });
   });
 }
+
+
+// Função para carregar dados do banco de dados (videos)
+async function loadVideos() {
+  return new Promise((resolve, reject) => {
+    db.all('SELECT * FROM videos', [], (err, rows) => {
+      if (err) return reject(err);
+
+      videos = rows.map(video => ({
+        id: video.id,
+        name: video.name,
+        desc: video.desc,
+        videoFile: video.videoFile,
+        channel: video.channel_name,
+        createdIn: video.createdIn,
+        createdAt: video.createdAt
+      }));
+
+      resolve();
+    });
+  });
+}
+
+
 
 function extractVideoReference(content) {
   const match = content.match(/video-refer:\s*(.+\.mp4)/);
@@ -104,7 +130,7 @@ function search(query) {
   const lemmatizedQuery = lemmatizeText(query);
   const options = {
     includeScore: true,
-    keys: ['name', 'desc', 'channel'],
+    keys: ['name', 'desc'],
     threshold: configadjust,
   };
   const fuse = new Fuse(Object.values(channels), options);
@@ -113,7 +139,7 @@ function search(query) {
 
 app.use(async (req, res, next) => {
   try {
-    await loadDatabase();
+    await Promise.all([loadDatabase(), loadVideos()]);
     next();
   } catch (error) {
     res.status(500).json({ error: 'Erro ao atualizar a database', details: error.message });
