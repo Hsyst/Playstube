@@ -196,7 +196,7 @@ Vamos separar pelo Playstube-Main (HTTP), e o Playstube-SSL (HTTPS)/(SSL).
 - Linha 19
   - "Configuração da linguagem pra resposta de CreatedIn" (Não nos responsabilizamos por bugs)
 
-- Linha 60 e 61
+- Linha 62 e 63
   - "Alteração de qual é o nome dos endpoints de acesso ao site, e aos vídeos."
 
 - Linha 186
