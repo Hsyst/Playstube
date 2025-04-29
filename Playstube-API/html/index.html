@@ -1,58 +1,355 @@
 <!DOCTYPE html>
-<html data-bs-theme="light" lang="en">
+<html data-bs-theme="dark" lang="pt-BR">
 
 <head>
+
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-    <title>Página Inicial - Playstube</title>
+    <title>Home - PlaysTube 3.0</title>
     <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800&amp;display=swap">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic&amp;display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Roboto:wght@300;400;500&display=swap">
     <link rel="stylesheet" href="https://cdn.plyr.io/3.6.8/plyr.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
     <style>
+        :root {
+            --primary: #6c5ce7;
+            --primary-dark: #5649c0;
+            --primary-light: #8579ef;
+            --secondary: #00cec9;
+            --dark: #2d3436;
+            --darker: #1e272e;
+            --light: #f5f6fa;
+            --gray: #b2bec3;
+            --gray-dark: #636e72;
+            --gradient: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            --glass: rgba(45, 52, 54, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
+
+        body {
+            background-color: var(--darker);
+            color: var(--light);
+            font-family: 'Roboto', sans-serif;
+            line-height: 1.6;
+        }
+
+        /* Header */
+        .masthead {
+            background: var(--gradient);
+            padding: 8rem 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .masthead::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('assets/img/home-bg2.jpg') center/cover no-repeat;
+            opacity: 0.15;
+            z-index: 0;
+        }
+
+        .site-heading {
+            position: relative;
+            z-index: 1;
+        }
+
+        .site-heading h1 {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 3.5rem;
+            margin-bottom: 0.5rem;
+            color: white;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .site-heading .subheading {
+            font-size: 1.5rem;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 1.5rem;
+            display: block;
+        }
+
+        /* Buttons */
+        .btn-primary {
+            background: var(--primary);
+            border: none;
+            border-radius: 50px;
+            padding: 12px 30px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(108, 92, 231, 0.3);
+        }
+
+        /* Search Section */
+        .search-container {
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            padding: 2rem;
+            margin-top: -3rem;
+            position: relative;
+            z-index: 10;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        }
+
+        .search-container h2 {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+            color: white;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-control {
+            background: rgba(30, 39, 46, 0.8);
+            border: 1px solid var(--gray-dark);
+            color: var(--light);
+            border-radius: 50px;
+            padding: 12px 20px;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus {
+            background: rgba(30, 39, 46, 0.9);
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.2);
+            color: var(--light);
+        }
+
+        /* Video List */
+        .video-card {
+            background: var(--glass);
+            backdrop-filter: blur(8px);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            margin-bottom: 2rem;
+        }
+
+        .video-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+            border-color: var(--primary);
+        }
+
+        .thumbnail-container {
+            position: relative;
+            width: 100%;
+            height: 180px;
+            overflow: hidden;
+        }
+
         .thumbnail {
-            width: 100px;
-            height: 80px;
+            width: 100%;
+            height: 100%;
             object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .video-card:hover .thumbnail {
+            transform: scale(1.05);
+        }
+
+        .play-icon {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 60px;
+            height: 60px;
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+
+        .video-card:hover .play-icon {
+            opacity: 1;
+        }
+
+        .play-icon svg {
+            width: 24px;
+            height: 24px;
+            fill: white;
+        }
+
+        .video-content {
+            padding: 1.5rem;
+        }
+
+        .video-title {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+            color: var(--light);
+            margin-bottom: 0.75rem;
+            font-size: 1.25rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .video-description {
+            color: var(--gray);
+            font-size: 0.95rem;
+            margin-bottom: 1rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .video-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.85rem;
+            color: var(--gray);
+        }
+
+        .channel-link {
+            color: var(--secondary);
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        .channel-link:hover {
+            color: var(--primary-light);
+            text-decoration: underline;
+        }
+
+        /* Modal */
+        .modal-content {
+            background: var(--dark);
+            border: 1px solid var(--gray-dark);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .modal-header {
+            border-bottom: 1px solid var(--gray-dark);
+            padding: 1.5rem;
+        }
+
+        .modal-title {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+            color: var(--light);
+        }
+
+        .modal-body {
+            padding: 0;
+        }
+
+        .plyr--video {
+            border-radius: 0;
+        }
+
+        .video-description-modal {
+            padding: 1.5rem;
+            color: var(--gray);
+            border-top: 1px solid var(--gray-dark);
+        }
+
+        /* Footer */
+        footer {
+            background: var(--dark);
+            padding: 3rem 0;
+            margin-top: 3rem;
+        }
+
+        .copyright {
+            color: var(--gray);
+            text-align: center;
+            font-size: 0.9rem;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .animate-fadein {
+            animation: fadeIn 0.6s ease-out forwards;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .site-heading h1 {
+                font-size: 2.5rem;
+            }
+            
+            .thumbnail-container {
+                height: 150px;
+            }
         }
     </style>
 </head>
 
 <body>
-    <header class="masthead" style="background-image:url('assets/img/home-bg2.jpg');">
+    <header class="masthead">
         <div class="overlay"></div>
         <div class="container">
             <div class="row">
                 <div class="col-md-10 col-lg-8 mx-auto position-relative">
-                    <div class="site-heading">
-                        <h1>Bem Vindo(a)</h1><span class="subheading">ao PlaysTube (Rodando na versão 2.0)</span>
+                    <div class="site-heading animate__animated animate__fadeIn">
+                        <h1>Bem Vindo(a)</h1>
+                        <span class="subheading">ao PlaysTube (Rodando na versão 3.0)</span>
                         <p>Que tal descer a página, e descobrir mais?</p>
-                        <div class="container"><a class="navbar-brand" href="index.html"></a><a class="btn btn-primary" role="button" href="create.html">Poste um vídeo!</a></div>
+                        <div class="mt-4">
+                            <a class="btn btn-primary" href="create.html" role="button">Poste um vídeo!</a>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </header>
-    <section class="position-relative py-4 py-xl-5">
-        <section class="py-4 py-xl-5">
-            <div class="container">
-                <div class="text-white bg-dark border rounded border-0 border-light d-flex flex-column justify-content-between align-items-center flex-lg-row p-4 p-lg-5">
-                    <div class="text-center text-lg-start py-3 py-lg-1">
-                        <h2 class="fw-bold mb-2"><strong>Pesquise um vídeo!</strong></h2>
-                    </div>
-                    <form class="d-flex justify-content-center flex-wrap my-2" id="searchForm">
-                        <div class="my-2"><input class="form-control" type="text" name="search" id="searchInput" placeholder="Pesquise aqui!"></div>
-                        <div class="my-2"><button class="btn btn-primary ms-sm-2" type="submit">Pesquisar</button></div>
+
+    <section class="container">
+        <div class="search-container animate__animated animate__fadeIn animate__delay-1s">
+            <div class="row align-items-center">
+                <div class="col-md-4 mb-3 mb-md-0">
+                    <h2 class="mb-0"><strong>Pesquise um vídeo!</strong></h2>
+                </div>
+                <div class="col-md-8">
+                    <form class="row g-2" id="searchForm">
+                        <div class="col">
+                            <input class="form-control" type="text" name="search" id="searchInput" placeholder="Pesquise aqui!">
+                        </div>
+                        <div class="col-auto">
+                            <button class="btn btn-primary" type="submit">Pesquisar</button>
+                        </div>
                     </form>
                 </div>
             </div>
-        </section>
+        </div>
     </section>
-    <div class="container" id="videoList">
-        <div class="row">
+
+    <section class="container py-5">
+        <div class="row g-4" id="videoList">
             <!-- Lista de vídeos será gerada aqui -->
         </div>
-    </div>
+    </section>
 
     <!-- Modal para o player -->
     <div class="modal fade" id="videoModal" tabindex="-1" aria-labelledby="videoModalLabel" aria-hidden="true">
@@ -67,7 +364,9 @@
                         <source id="videoSource" src="" type="video/mp4">
                         Seu navegador não suporta o elemento de vídeo.
                     </video>
-                    <p id="videoDescription"></p>
+                    <div class="video-description-modal">
+                        <p id="videoDescription"></p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -77,15 +376,27 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-10 col-lg-8 mx-auto">
-                    <p class="text-muted copyright">Copyright&nbsp;© Hsyst 2025</p>
+                    <p class="copyright">Copyright&nbsp;© Hsyst 2025</p>
                 </div>
             </div>
         </div>
     </footer>
+
     <script src="assets/bootstrap/js/bootstrap.min.js"></script>
     <script src="https://cdn.plyr.io/3.6.8/plyr.polyfilled.js"></script>
     <script>
-        const videoList = document.getElementById('videoList').querySelector('.row');
+        // Função para evitar XSS
+        function escapeHtml(unsafe) {
+            if (!unsafe) return '';
+            return unsafe.toString()
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+
+        const videoList = document.getElementById('videoList');
         const searchForm = document.getElementById('searchForm');
         const videoModal = new bootstrap.Modal(document.getElementById('videoModal'));
         const videoPlayer = new Plyr('#videoPlayer');
@@ -95,57 +406,174 @@
 
         // Função para listar vídeos
         async function fetchVideos() {
-            const response = await fetch('/get-videos');
-            const data = await response.json();
-            displayVideos(data.videos);
+            try {
+                const response = await fetch('/get-videos');
+                const data = await response.json();
+                displayVideos(data.videos);
+            } catch (error) {
+                console.error('Erro ao carregar vídeos:', error);
+                videoList.innerHTML = `
+                    <div class="col-12 text-center py-5">
+                        <div class="alert alert-danger">
+                            Ocorreu um erro ao carregar os vídeos. Por favor, tente novamente.
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        // Função para formatar data corretamente
+        function formatDate(dateString) {
+            if (!dateString) return 'Data desconhecida';
+            
+            try {
+                // Tenta parsear a data se for string
+                const date = new Date(dateString);
+                
+                // Verifica se a data é válida
+                if (isNaN(date.getTime())) {
+                    // Se for inválida, tenta extrair do formato ISO ou timestamp
+                    const timestamp = Date.parse(dateString);
+                    if (!isNaN(timestamp)) {
+                        const validDate = new Date(timestamp);
+                        return validDate.toLocaleDateString('pt-BR', {
+                            day: '2-digit',
+                            month: '2-digit',
+                            year: 'numeric',
+                            hour: '2-digit',
+                            minute: '2-digit'
+                        });
+                    }
+                    return dateString; // Retorna o original se não conseguir converter
+                }
+                
+                return date.toLocaleDateString('pt-BR', {
+                    day: '2-digit',
+                    month: '2-digit',
+                    year: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+            } catch (e) {
+                console.error('Erro ao formatar data:', e);
+                return dateString; // Retorna o original em caso de erro
+            }
         }
 
         // Função para exibir vídeos na página
         function displayVideos(videos) {
+            if (!videos || videos.length === 0) {
+                videoList.innerHTML = `
+                    <div class="col-12 text-center py-5">
+                        <div class="alert alert-info">
+                            Nenhum vídeo encontrado. Que tal ser o primeiro a postar?
+                        </div>
+                    </div>
+                `;
+                return;
+            }
+
             videoList.innerHTML = '';
-            videos.forEach(video => {
+            videos.forEach((video, index) => {
                 const videoItem = document.createElement('div');
-                videoItem.className = 'col-md-10 col-lg-8 col-xl-12';
-                    videoItem.innerHTML = `
-            <div class="post-preview">
-                <a href="#" onclick="openVideo('${video.videoFile}', '${video.name}', '${video.description}')">
-                    <h2 class="post-title">
-                        <img width="100" height="80" src="/logo.png" class="thumbnail" onload="/logo.png', this)">
-                        &nbsp; ${video.name}
-                    </h2>
-                    <h3 class="post-subtitle">${video.description}</h3>
-                </a>
-                <p class="post-meta">Enviado por&nbsp;<a href="channel.html#channel=${video.channel}">${video.channel} em ${video.createdIn}</a></p>
-            </div>
-            <hr>
-        `;
-        videoList.appendChild(videoItem);
+                videoItem.className = 'col-md-6 col-lg-4 col-xl-3 animate-fadein';
+                videoItem.style.animationDelay = `${index * 0.1}s`;
+                
+                // Sanitize e trata todos os dados
+                const videoName = escapeHtml(video.name || 'Sem título');
+                const videoDesc = escapeHtml(video.description || 'Sem descrição');
+                const videoChannel = escapeHtml(video.channel || 'Autor desconhecido');
+                const videoDate = formatDate(video.createdIn);
+                const videoFile = escapeHtml(video.videoFile || '');
+                
+                videoItem.innerHTML = `
+                    <div class="video-card h-100">
+                        <div class="video-card-inner h-100">
+                            <div class="thumbnail-container" 
+                                 data-video-file="${videoFile}"
+                                 data-video-title="${videoName}" 
+                                 data-video-desc="${videoDesc}">
+                                <img src="/logo.png" class="thumbnail" onerror="this.onerror=null; this.src='/logo.png'">
+                                <div class="play-icon">
+                                    <svg viewBox="0 0 24 24">
+                                        <path d="M8 5v14l11-7z"/>
+                                    </svg>
+                                </div>
+                            </div>
+                            <div class="video-content">
+                                <h3 class="video-title">${videoName}</h3>
+                                <p class="video-description">${videoDesc}</p>
+                                <div class="video-meta">
+                                    <a href="channel.html#channel=${encodeURIComponent(video.channel)}" class="channel-link" onclick="event.stopPropagation()">${videoChannel}</a>
+                                    <span>${videoDate}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                // Gera thumbnail apenas se o arquivo de vídeo existir
+                if (videoFile) {
+                    generateThumbnail(videoFile, videoItem.querySelector('img'));
+                }
+                
+                videoList.appendChild(videoItem);
+            });
+
+            // Adiciona event listeners de forma segura
+            document.querySelectorAll('.thumbnail-container').forEach(card => {
+                card.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const file = this.getAttribute('data-video-file');
+                    const title = this.getAttribute('data-video-title');
+                    const desc = this.getAttribute('data-video-desc');
+                    openVideo(file, title, desc);
+                });
             });
         }
 
-        // Função para gerar a thumbnail a partir do primeiro frame do vídeo
+        // Função para gerar a thumbnail
         function generateThumbnail(videoFile, imgElement) {
             const video = document.createElement('video');
             video.src = `/database/${videoFile}`;
+            video.crossOrigin = 'anonymous';
+            
             video.addEventListener('loadeddata', () => {
-                video.currentTime = 1; // Captura o frame no segundo 1
+                video.currentTime = 1;
             });
+            
             video.addEventListener('seeked', () => {
-                const canvas = document.createElement('canvas');
-                canvas.width = 100;
-                canvas.height = 80;
-                const context = canvas.getContext('2d');
-                context.drawImage(video, 0, 0, canvas.width, canvas.height);
-                imgElement.src = canvas.toDataURL(); // Define a imagem da thumbnail
+                try {
+                    const canvas = document.createElement('canvas');
+                    canvas.width = 320;
+                    canvas.height = 180;
+                    const context = canvas.getContext('2d');
+                    context.drawImage(video, 0, 0, canvas.width, canvas.height);
+                    imgElement.src = canvas.toDataURL();
+                } catch (e) {
+                    console.error('Erro ao gerar thumbnail:', e);
+                    imgElement.src = '/logo.png';
+                }
             });
+            
+            video.addEventListener('error', () => {
+                imgElement.src = '/logo.png';
+            });
+            
             video.load();
         }
 
         // Função para abrir o vídeo no modal
         function openVideo(videoFile, title, description) {
+            if (!videoFile) {
+                console.error('Nenhum arquivo de vídeo especificado');
+                return;
+            }
+
             videoSource.src = `/database/${videoFile}`;
-            videoModalLabel.textContent = title;
-            videoDescription.textContent = description;
+            videoModalLabel.textContent = title || 'Vídeo sem título';
+            videoDescription.textContent = description || 'Sem descrição disponível';
+
             videoPlayer.source = {
                 type: 'video',
                 sources: [{
@@ -153,26 +581,65 @@
                     type: 'video/mp4',
                 }],
             };
-            videoPlayer.play();
+
+            // Adiciona listener para quando o modal for fechado
+            videoModal._element.addEventListener('hidden.bs.modal', function onModalClose() {
+                try {
+                    videoPlayer.pause(); // Pausa o vídeo primeiro
+                    videoPlayer.currentTime = 0; // Reinicia para o início
+                } catch (e) {
+                    console.error('Erro ao parar o vídeo:', e);
+                    window.location.reload(); // Recarrega a página se não conseguir parar
+                }
+                // Remove o listener para evitar múltiplas execuções
+                videoModal._element.removeEventListener('hidden.bs.modal', onModalClose);
+            });
+
             videoModal.show();
+
+            // Tenta reproduzir com tratamento de erro
+            setTimeout(() => {
+                videoPlayer.play().catch(e => {
+                    console.log('Auto-play prevenido:', e);
+                    // Mostra mensagem amigável se necessário
+                });
+            }, 500);
         }
 
         // Função para pesquisar vídeos
         async function searchVideos(query) {
-            const response = await fetch(`/query-videos?query=${query}`);
-            const data = await response.json();
-            displayVideos(data.results);
+            if (!query || !query.trim()) {
+                fetchVideos();
+                return;
+            }
+
+            try {
+                const response = await fetch(`/query-videos?query=${encodeURIComponent(query)}`);
+                const data = await response.json();
+                displayVideos(data.results || []);
+            } catch (error) {
+                console.error('Erro na pesquisa:', error);
+                videoList.innerHTML = `
+                    <div class="col-12 text-center py-5">
+                        <div class="alert alert-danger">
+                            Ocorreu um erro na pesquisa. Por favor, tente novamente.
+                        </div>
+                    </div>
+                `;
+            }
         }
 
         // Evento de submissão do formulário de pesquisa
-        searchForm.addEventListener('submit', (event) => {
-            event.preventDefault();
-            const query = document.getElementById('searchInput').value;
-            searchVideos(query);
-        });
+        if (searchForm) {
+            searchForm.addEventListener('submit', (event) => {
+                event.preventDefault();
+                const query = document.getElementById('searchInput')?.value?.trim() || '';
+                searchVideos(query);
+            });
+        }
 
-        // Chama a função para listar vídeos ao carregar a página
-        fetchVideos();
+        // Inicia o carregamento dos vídeos
+        document.addEventListener('DOMContentLoaded', fetchVideos);
     </script>
 </body>
 </html>
