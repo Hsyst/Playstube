@@ -1,59 +1,348 @@
 <!DOCTYPE html>
-<html data-bs-theme="light" lang="en">
+<html data-bs-theme="dark" lang="pt-BR">
 
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-    <title>Canal - Playstube</title>
+    <title>Canal - PlaysTube 2.0</title>
     <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800&amp;display=swap">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic&amp;display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
     <link rel="stylesheet" href="https://cdn.plyr.io/3.6.8/plyr.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
     <style>
+        :root {
+            --primary: #7c3aed;
+            --primary-dark: #5b21b6;
+            --primary-light: #8b5cf6;
+            --secondary: #ec4899;
+            --dark: #1e293b;
+            --darker: #0f172a;
+            --light: #f8fafc;
+            --gray: #94a3b8;
+            --gray-dark: #475569;
+            --gradient: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            --glass: rgba(30, 41, 59, 0.5);
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
+
+        body {
+            background-color: var(--darker);
+            color: var(--light);
+            font-family: 'Poppins', sans-serif;
+            line-height: 1.6;
+        }
+
+        /* Navbar */
+        .navbar {
+            background: var(--darker);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 1rem 0;
+        }
+
+        .navbar-brand {
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 500;
+            color: var(--light);
+            font-size: 1.2rem;
+        }
+
+        /* Header */
+        .masthead {
+            background: var(--gradient);
+            padding: 6rem 0 4rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .masthead::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('assets/img/home-bg.jpg') center/cover no-repeat;
+            opacity: 0.2;
+            z-index: 0;
+        }
+
+        .site-heading {
+            position: relative;
+            z-index: 1;
+        }
+
+        #channelName {
+            font-weight: 700;
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            color: white;
+        }
+
+        #channelDesc {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.9);
+            display: block;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* Buttons */
+        .btn-primary {
+            background: var(--primary);
+            border: none;
+            border-radius: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
+        }
+
+        /* Video Presentation */
+        .channel-presentation {
+            margin: 3rem 0;
+        }
+
+        .channel-presentation h1 {
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: var(--light);
+        }
+
+        #channelPresentation {
+            width: 100%;
+            height: auto;
+            border-radius: 0.5rem;
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Video List */
+        .video-list {
+            margin: 3rem 0;
+        }
+
+        .video-list h1 {
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: var(--light);
+        }
+
+        .video-card {
+            background: var(--glass);
+            backdrop-filter: blur(8px);
+            border: 1px solid var(--glass-border);
+            border-radius: 0.75rem;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            margin-bottom: 2rem;
+        }
+
+        .video-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+            border-color: var(--primary);
+        }
+
+        .thumbnail-container {
+            position: relative;
+            width: 100%;
+            height: 180px;
+            overflow: hidden;
+        }
+
         .thumbnail {
-            width: 100px;
-            height: 80px;
+            width: 100%;
+            height: 100%;
             object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .video-card:hover .thumbnail {
+            transform: scale(1.05);
+        }
+
+        .play-icon {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 60px;
+            height: 60px;
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+
+        .video-card:hover .play-icon {
+            opacity: 1;
+        }
+
+        .play-icon svg {
+            width: 24px;
+            height: 24px;
+            fill: white;
+        }
+
+        .video-content {
+            padding: 1.5rem;
+        }
+
+        .video-title {
+            font-weight: 600;
+            color: var(--light);
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .video-description {
+            color: var(--gray);
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .video-meta {
+            font-size: 0.8rem;
+            color: var(--gray);
+        }
+
+        /* Modal */
+        .modal-content {
+            background: var(--dark);
+            border: 1px solid var(--gray-dark);
+            border-radius: 0.75rem;
+            overflow: hidden;
+        }
+
+        .modal-header {
+            border-bottom: 1px solid var(--gray-dark);
+            padding: 1.5rem;
+        }
+
+        .modal-title {
+            font-weight: 600;
+            color: var(--light);
+        }
+
+        .modal-body {
+            padding: 0;
+        }
+
+        .plyr--video {
+            border-radius: 0;
+        }
+
+        .video-description-modal {
+            padding: 1.5rem;
+            color: var(--gray);
+            border-top: 1px solid var(--gray-dark);
+        }
+
+        /* Footer */
+        footer {
+            background: var(--dark);
+            padding: 3rem 0;
+            margin-top: 3rem;
+        }
+
+        .copyright {
+            color: var(--gray);
+            text-align: center;
+            font-size: 0.9rem;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .animate-fadein {
+            animation: fadeIn 0.6s ease-out forwards;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            #channelName {
+                font-size: 2rem;
+            }
+            
+            #channelDesc {
+                font-size: 1rem;
+            }
+            
+            .thumbnail-container {
+                height: 150px;
+            }
         }
     </style>
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg fixed-top" id="mainNav">
-        <div class="container"><a class="navbar-brand" href="index.html">PlaysTube - 2.0</a><a class="btn btn-primary" role="button" href="index.html">Voltar</a></div>
+    <nav class="navbar navbar-expand-lg fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">PlaysTube 2.0</a>
+            <a class="btn btn-primary" href="index.html" role="button">Voltar</a>
+        </div>
     </nav>
-    <header class="masthead" style="background-image:url('assets/img/home-bg.jpg');">
+
+    <header class="masthead">
         <div class="overlay"></div>
         <div class="container">
             <div class="row">
                 <div class="col-md-10 col-lg-8 mx-auto position-relative">
                     <div class="site-heading">
-                        <h1 id="channelName"></h1>
+                        <h1 id="channelName">Carregando...</h1>
                         <span class="subheading" id="channelDesc"></span>
                     </div>
                 </div>
             </div>
         </div>
     </header>
+
     <div class="container">
-        <h1>Apresentação do canal:</h1>
-        <video id="channelPresentation" width="560" height="315" controls autoplay></video>
-        <hr>
-        <h1>Vídeos do canal:</h1>
-        <div id="videoList" class="row">
-            <!-- Lista de vídeos será gerada aqui -->
+        <div class="channel-presentation animate__animated animate__fadeIn">
+            <h1>Apresentação do canal</h1>
+            <div class="ratio ratio-16x9">
+                <video id="channelPresentation" controls></video>
+            </div>
+        </div>
+
+        <div class="video-list">
+            <h1>Vídeos do canal</h1>
+            <div id="videoList" class="row g-4">
+                <!-- Lista de vídeos será gerada aqui -->
+            </div>
         </div>
     </div>
-    <hr>
+
     <footer>
         <div class="container">
             <div class="row">
                 <div class="col-md-10 col-lg-8 mx-auto">
-                    <p class="text-muted copyright">Copyright&nbsp;© Hsyst 2025</p>
+                    <p class="copyright">Copyright&nbsp;© Hsyst 2025</p>
                 </div>
             </div>
         </div>
     </footer>
+
     <!-- Modal para o player -->
     <div class="modal fade" id="videoModal" tabindex="-1" aria-labelledby="videoModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
@@ -67,118 +356,304 @@
                         <source id="videoSource" src="" type="video/mp4">
                         Seu navegador não suporta o elemento de vídeo.
                     </video>
-                    <p id="videoDescription"></p>
+                    <div class="video-description-modal">
+                        <p id="videoDescription"></p>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+
     <script src="assets/bootstrap/js/bootstrap.min.js"></script>
     <script src="https://cdn.plyr.io/3.6.8/plyr.polyfilled.js"></script>
-<script>
-    const videoList = document.getElementById('videoList');
-    const channelName = document.getElementById('channelName');
-    const channelDesc = document.getElementById('channelDesc');
-    const channelPresentation = document.getElementById('channelPresentation');
-
-    // Função para obter o nome do canal da URL
-    function getChannelFromURL() {
-        const hash = window.location.hash;
-        const channel = hash.split('=')[1];
-        return channel ? decodeURIComponent(channel) : null;
-    }
-
-    // Função para buscar informações do canal
-    async function fetchChannelInfo(channel) {
-        const response = await fetch(`/get-channels`);
-        const data = await response.json();
-        const channelInfo = data.channels.find(c => c.name === channel);
-        if (channelInfo) {
-            channelName.textContent = channelInfo.name;
-            channelDesc.textContent = channelInfo.desc;
+    <script>
+        // Função para evitar XSS
+        function escapeHtml(unsafe) {
+            if (!unsafe) return '';
+            return unsafe.toString()
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
         }
-    }
 
-    // Função para listar vídeos do canal
-    async function fetchChannelVideos(channel) {
-        const response = await fetch(`/get-videos?ofchannel=${channel}`);
-        const data = await response.json();
-        displayVideos(data.videos);
-        // Exibir um vídeo aleatório como apresentação do canal
-        if (data.videos.length > 0) {
-            const randomVideo = data.videos[Math.floor(Math.random() * data.videos.length)];
-            channelPresentation.src = `/database/${randomVideo.videoFile}`;
+        // Elementos DOM
+        const videoList = document.getElementById('videoList');
+        const channelName = document.getElementById('channelName');
+        const channelDesc = document.getElementById('channelDesc');
+        const channelPresentation = document.getElementById('channelPresentation');
+
+        // Função para obter o nome do canal da URL
+        function getChannelFromURL() {
+            const hash = window.location.hash;
+            if (!hash || !hash.includes('channel=')) {
+                console.error('Nenhum canal especificado na URL');
+                return null;
+            }
+            
+            try {
+                const channel = hash.split('channel=')[1];
+                return channel ? decodeURIComponent(channel) : null;
+            } catch (e) {
+                console.error('Erro ao decodificar o canal da URL:', e);
+                return null;
+            }
         }
-    }
 
-    // Função para exibir vídeos na página
-    function displayVideos(videos) {
-        videoList.innerHTML = '';
-        videos.forEach(video => {
-            const videoItem = document.createElement('div');
-            videoItem.className = 'col-md-10 col-lg-8 col-xl-12';
-            videoItem.innerHTML = `
-                <div class="post-preview">
-                    <a href="#" onclick="openVideo('${video.videoFile}', '${video.name}', '${video.description}')">
-                        <h2 class="post-title">
-                            <img width="100" height="80" src="/logo.png" class="thumbnail" onload="generateThumbnail('${video.videoFile}', this)">
-                            &nbsp; ${video.name}
-                        </h2>
-                        <h3 class="post-subtitle">${video.description}</h3>
-                    </a>
-                    <p class="post-meta">Enviado por&nbsp;<a href="#">${video.channel} em ${video.createdIn}</a></p>
-                </div>
-                <hr>
-            `;
-            videoList.appendChild(videoItem);
+        // Função para formatar data
+        function formatDate(dateString) {
+            if (!dateString) return 'Data desconhecida';
+            
+            try {
+                // Tenta parsear a data de vários formatos
+                let date = new Date(dateString);
+                
+                // Se for inválida, tenta extrair do formato ISO ou timestamp
+                if (isNaN(date.getTime())) {
+                    const timestamp = Date.parse(dateString);
+                    if (!isNaN(timestamp)) {
+                        date = new Date(timestamp);
+                    } else {
+                        return dateString; // Retorna o original se não conseguir converter
+                    }
+                }
+                
+                return date.toLocaleDateString('pt-BR', {
+                    day: '2-digit',
+                    month: '2-digit',
+                    year: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+            } catch (e) {
+                console.error('Erro ao formatar data:', e);
+                return dateString;
+            }
+        }
+
+        // Função para buscar informações do canal
+        async function fetchChannelInfo(channel) {
+            try {
+                const response = await fetch(`/get-channels`);
+                if (!response.ok) throw new Error('Erro na resposta da API');
+                
+                const data = await response.json();
+                if (!data.channels) throw new Error('Formato de dados inválido');
+                
+                const channelInfo = data.channels.find(c => c.name === channel);
+                if (channelInfo) {
+                    channelName.textContent = escapeHtml(channelInfo.name || 'Canal sem nome');
+                    channelDesc.textContent = escapeHtml(channelInfo.desc || 'Sem descrição');
+                } else {
+                    channelName.textContent = `Canal "${escapeHtml(channel)}" não encontrado`;
+                    channelDesc.textContent = '';
+                }
+            } catch (error) {
+                console.error('Erro ao buscar informações do canal:', error);
+                channelName.textContent = 'Erro ao carregar canal';
+                channelDesc.textContent = 'Não foi possível carregar as informações';
+            }
+        }
+
+        // Função para listar vídeos do canal
+        async function fetchChannelVideos(channel) {
+            try {
+                const response = await fetch(`/get-videos?ofchannel=${encodeURIComponent(channel)}`);
+                if (!response.ok) throw new Error('Erro na resposta da API');
+                
+                const data = await response.json();
+                displayVideos(data.videos || []);
+                
+                // Configura vídeo de apresentação se houver vídeos
+                if (data.videos && data.videos.length > 0) {
+                    const randomVideo = data.videos[Math.floor(Math.random() * data.videos.length)];
+                    if (randomVideo && randomVideo.videoFile) {
+                        channelPresentation.src = `/database/${randomVideo.videoFile}`;
+                        new Plyr(channelPresentation);
+                    }
+                }
+            } catch (error) {
+                console.error('Erro ao buscar vídeos do canal:', error);
+                videoList.innerHTML = `
+                    <div class="col-12 text-center py-5">
+                        <div class="alert alert-danger">
+                            Ocorreu um erro ao carregar os vídeos. Por favor, tente novamente.
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        // Função para exibir vídeos na página
+        function displayVideos(videos) {
+            if (!videos || videos.length === 0) {
+                videoList.innerHTML = `
+                    <div class="col-12 text-center py-5">
+                        <div class="alert alert-info">
+                            Este canal ainda não possui vídeos.
+                        </div>
+                    </div>
+                `;
+                return;
+            }
+
+            videoList.innerHTML = '';
+            videos.forEach((video, index) => {
+                const videoItem = document.createElement('div');
+                videoItem.className = 'col-md-6 col-lg-4 col-xl-3 animate-fadein';
+                videoItem.style.animationDelay = `${index * 0.1}s`;
+                
+                // Sanitize e trata todos os dados
+                const videoName = escapeHtml(video.name || 'Vídeo sem título');
+                const videoDesc = escapeHtml(video.description || 'Sem descrição');
+                const videoChannel = escapeHtml(video.channel || 'Autor desconhecido');
+                const videoDate = formatDate(video.createdIn);
+                const videoFile = escapeHtml(video.videoFile || '');
+                
+                videoItem.innerHTML = `
+                    <div class="video-card h-100">
+                        <div class="video-card-inner h-100" 
+                             data-video-file="${videoFile}"
+                             data-video-title="${videoName}" 
+                             data-video-desc="${videoDesc}">
+                            <div class="thumbnail-container">
+                                <img src="/logo.png" class="thumbnail" onerror="this.onerror=null; this.src='/logo.png'">
+                                <div class="play-icon">
+                                    <svg viewBox="0 0 24 24">
+                                        <path d="M8 5v14l11-7z"/>
+                                    </svg>
+                                </div>
+                            </div>
+                            <div class="video-content">
+                                <h3 class="video-title">${videoName}</h3>
+                                <p class="video-description">${videoDesc}</p>
+                                <div class="video-meta">
+                                    <span>${videoDate}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                // Gera thumbnail apenas se o arquivo de vídeo existir
+                if (videoFile) {
+                    generateThumbnail(videoFile, videoItem.querySelector('img'));
+                }
+                
+                videoList.appendChild(videoItem);
+            });
+
+            // Adiciona event listeners de forma segura
+            document.querySelectorAll('.video-card-inner').forEach(card => {
+                card.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const file = this.getAttribute('data-video-file');
+                    const title = this.getAttribute('data-video-title');
+                    const desc = this.getAttribute('data-video-desc');
+                    openVideo(file, title, desc);
+                });
+            });
+        }
+
+        // Função para gerar a thumbnail
+        function generateThumbnail(videoFile, imgElement) {
+            const video = document.createElement('video');
+            video.src = `/database/${videoFile}`;
+            video.crossOrigin = 'anonymous';
+            
+            video.addEventListener('loadeddata', () => {
+                video.currentTime = 1;
+            });
+            
+            video.addEventListener('seeked', () => {
+                try {
+                    const canvas = document.createElement('canvas');
+                    canvas.width = 320;
+                    canvas.height = 180;
+                    const context = canvas.getContext('2d');
+                    context.drawImage(video, 0, 0, canvas.width, canvas.height);
+                    imgElement.src = canvas.toDataURL();
+                } catch (e) {
+                    console.error('Erro ao gerar thumbnail:', e);
+                    imgElement.src = '/logo.png';
+                }
+            });
+            
+            video.addEventListener('error', () => {
+                imgElement.src = '/logo.png';
+            });
+            
+            video.load();
+        }
+
+        // Função para abrir o vídeo no modal
+        function openVideo(videoFile, title, description) {
+            if (!videoFile) {
+                console.error('Nenhum arquivo de vídeo especificado');
+                return;
+            }
+
+            const videoModal = new bootstrap.Modal(document.getElementById('videoModal'));
+            const videoPlayer = new Plyr('#videoPlayer');
+            const videoSource = document.getElementById('videoSource');
+            const videoDescription = document.getElementById('videoDescription');
+            const videoModalLabel = document.getElementById('videoModalLabel');
+
+            videoSource.src = `https://playstube.api.hsyst.xyz/database/${videoFile}`;
+            videoModalLabel.textContent = title || 'Vídeo sem título';
+            videoDescription.textContent = description || 'Sem descrição disponível';
+
+            videoPlayer.source = {
+                type: 'video',
+                sources: [{
+                    src: videoSource.src,
+                    type: 'video/mp4',
+                }],
+            };
+
+            // Adiciona listener para quando o modal for fechado
+            const modalElement = document.getElementById('videoModal');
+            modalElement.addEventListener('hidden.bs.modal', function onModalClose() {
+                try {
+                    videoPlayer.pause(); // Pausa o vídeo primeiro
+                    videoPlayer.currentTime = 0; // Reinicia para o início
+                } catch (e) {
+                    console.error('Erro ao parar o vídeo:', e);
+                    window.location.reload(); // Recarrega a página se não conseguir parar
+                }
+                // Remove o listener para evitar múltiplas execuções
+                modalElement.removeEventListener('hidden.bs.modal', onModalClose);
+            });
+
+            videoModal.show();
+
+            // Tenta reproduzir com tratamento de erro
+            setTimeout(() => {
+                videoPlayer.play().catch(e => {
+                    console.log('Auto-play prevenido:', e);
+                });
+            }, 500);
+        }
+
+        // Inicialização
+        document.addEventListener('DOMContentLoaded', () => {
+            const channel = getChannelFromURL();
+            if (channel) {
+                fetchChannelInfo(channel);
+                fetchChannelVideos(channel);
+            } else {
+                channelName.textContent = 'Canal não especificado';
+                channelDesc.textContent = 'Nenhum canal foi identificado na URL';
+                videoList.innerHTML = `
+                    <div class="col-12 text-center py-5">
+                        <div class="alert alert-warning">
+                            Por favor, acesse esta página através de um link válido de canal.
+                        </div>
+                    </div>
+                `;
+            }
         });
-    }
-
-    // Função para gerar a thumbnail a partir do primeiro frame do vídeo
-    function generateThumbnail(videoFile, imgElement) {
-        const video = document.createElement('video');
-        video.src = `/database/${videoFile}`;
-        video.addEventListener('loadeddata', () => {
-            video.currentTime = 1; // Captura o frame no segundo 1
-        });
-        video.addEventListener('seeked', () => {
-            const canvas = document.createElement('canvas');
-            canvas.width = 100;
-            canvas.height = 80;
-            const context = canvas.getContext('2d');
-            context.drawImage(video, 0, 0, canvas.width, canvas.height);
-            imgElement.src = canvas.toDataURL(); // Define a imagem da thumbnail
-        });
-        video.load();
-    }
-
-    // Função para abrir o vídeo no modal
-    function openVideo(videoFile, title, description) {
-        const videoModal = new bootstrap.Modal(document.getElementById('videoModal'));
-        const videoPlayer = new Plyr('#videoPlayer');
-        const videoSource = document.getElementById('videoSource');
-        const videoDescription = document.getElementById('videoDescription');
-        const videoModalLabel = document.getElementById('videoModalLabel');
-
-        videoSource.src = `/database/${videoFile}`;
-        videoModalLabel.textContent = title;
-        videoDescription.textContent = description;
-        videoPlayer.source = {
-            type: 'video',
-            sources: [{
-                src: videoSource.src,
-                type: 'video/mp4',
-            }],
-        };
-        videoPlayer.play();
-        videoModal.show();
-    }
-
-    // Chama as funções para buscar informações do canal e vídeos ao carregar a página
-    const channel = getChannelFromURL();
-    if (channel) {
-        fetchChannelInfo(channel);
-        fetchChannelVideos(channel);
-    }
-</script>
+    </script>
 </body>
 </html>
